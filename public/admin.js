@@ -1,2 +1,61 @@
 
 // Your Code Here
+/*
+async function tacos(){
+    let response = await fetch('http://localhost:3001/listBooks')
+let books = await response.json()
+
+})
+}
+tacos()
+*/
+/*
+let tsiQuantity;
+
+         document.getElementById("tsiButton").onclick = function(){
+            tsiQuantity = document.getElementById("tsi").ariaValueMax;
+            console.log("The Shinobi Initiative :")
+         }   
+
+*/
+async function main() {
+
+    let response = await fetch('http://localhost:3001/listBooks')
+
+    let books = await response.json()
+    books.forEach(renderBook)
+}
+
+function renderBook(book) {
+    let root = document.querySelector('#root')
+
+    let div = document.createElement('div')
+    div.textContent = book.title
+
+    let quantityInput = document.createElement('input')
+    quantityInput.value = book.quantity
+
+    let deleteButton = document.createElement('button')
+    deleteButton.attributes= 'DELETE BOOK'
+
+    let saveButton = document.createElement('button')
+    saveButton.textContent = 'Save'
+
+    saveButton.addEventListener('click', () => {
+        fetch('http://localhost:3001/updateBook', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: book.id,
+                quantity: quantityInput.value
+            })
+        })
+    })
+    div.append(quantityInput, saveButton)
+    root.append(div)
+    
+}
+
+main();
